@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Assessment - Fitness Tracker</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Form Container */
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        /* Form Elements */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="number"],
+        select {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            border-color: #3498db;
+        }
+
+        button {
+            padding: 12px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Status Message */
+        #health-status {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: center;
+            min-height: 60px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-container {
+                width: 90%;
+                padding: 15px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            input[type="number"],
+            select {
+                font-size: 16px;
+                padding: 12px;
+            }
+
+            button {
+                font-size: 18px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Health Details</h2>
+        <form id="health-form">
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" name="weight" required>
+
+            <label for="height">Height (cm):</label>
+            <input type="number" id="height" name="height" required>
+
+            <label for="exercise">Exercise Frequency (times per week):</label>
+            <input type="number" id="exercise" name="exercise" required>
+
+            <label for="blood-pressure-systolic">Blood Pressure (Systolic):</label>
+            <input type="number" id="blood-pressure-systolic" name="blood-pressure-systolic" required>
+
+            <label for="blood-pressure-diastolic">Blood Pressure (Diastolic):</label>
+            <input type="number" id="blood-pressure-diastolic" name="blood-pressure-diastolic" required>
+
+            <label for="cholesterol">Cholesterol Level (mg/dL):</label>
+            <input type="number" id="cholesterol" name="cholesterol" required>
+
+            <label for="diet">Dietary Habits:</label>
+            <select id="diet" name="diet" required>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="non-vegetarian">Non-Vegetarian</option>
+                <option value="vegan">Vegan</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label for="sleep">Average Sleep Duration (hours):</label>
+            <input type="number" id="sleep" name="sleep" required>
+
+            <button type="submit">Submit</button>
+        </form>
+        <div id="health-status" class="status"></div>
+    </div>
+
+    <script>
+        document.getElementById('health-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            // Get the values from the form
+            const age = parseInt(document.getElementById('age').value);
+            const weight = parseInt(document.getElementById('weight').value);
+            const height = parseInt(document.getElementById('height').value);
+            const exercise = parseInt(document.getElementById('exercise').value);
+            const bloodPressureSystolic = parseInt(document.getElementById('blood-pressure-systolic').value);
+            const bloodPressureDiastolic = parseInt(document.getElementById('blood-pressure-diastolic').value);
+            const cholesterol = parseInt(document.getElementById('cholesterol').value);
+            const diet = document.getElementById('diet').value;
+            const sleep = parseInt(document.getElementById('sleep').value);
+
+            // Simple health check logic
+            let healthStatus = "Your health status is unknown.";
+            const bmi = weight / ((height / 100) ** 2); // Calculate BMI
+
+            // BMI Assessment
+            if (bmi < 18.5) {
+                healthStatus = "Underweight. Consider gaining some weight.";
+            } else if (bmi >= 18.5 && bmi < 24.9) {
+                healthStatus = "Healthy weight. Keep it up!";
+            } else if (bmi >= 25 && bmi < 29.9) {
+                healthStatus = "Overweight. Consider losing some weight.";
+            } else {
+                healthStatus = "Obese. It's advisable to consult a healthcare provider.";
+            }
+
+            // Blood Pressure Assessment
+            if (bloodPressureSystolic < 120 && bloodPressureDiastolic < 80) {
+                healthStatus += " Your blood pressure is normal.";
+            } else if (bloodPressureSystolic < 130 && bloodPressureDiastolic < 80) {
+                healthStatus += " Your blood pressure is elevated.";
+            } else {
+                healthStatus += " You may have high blood pressure. Consult a doctor.";
+            }
+
+            // Cholesterol Assessment
+            if (cholesterol < 200) {
+                healthStatus += " Your cholesterol level is healthy.";
+            } else {
+                healthStatus += " Your cholesterol level is high. Consider dietary changes.";
+            }
+
+            // Check exercise frequency
+            if (exercise < 3) {
+                healthStatus += " You should aim for at least 3 exercise sessions per week.";
+            } else {
+                healthStatus += " Great job on your exercise routine!";
+            }
+
+            // Sleep Assessment
+            if (sleep < 7) {
+                healthStatus += " You should aim for at least 7 hours of sleep per night.";
+            } else {
+                healthStatus += " Good job on getting enough sleep!";
+            }
+
+            // Display the health status
+            document.getElementById('health-status').textContent = healthStatus;
+        });
